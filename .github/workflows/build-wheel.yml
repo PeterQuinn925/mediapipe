@@ -1,0 +1,17 @@
+name: Build MediaPipe RPi wheel
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: docker build -f Dockerfile.manylinux2014_aarch64rp4 -t mp_manylinux_aarch64rp4 .
+      - name: Extract wheel
+        run: |
+          docker create -ti --name mp_pip_package_container mp_manylinux_aarch64rp4:latest
+          docker cp mp_pip_package_container:/wheelhouse/. wheelhouse/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mediapipe-wheel
+          path: wheelhouse/
