@@ -44,7 +44,7 @@ RUN rm -f $PROTOC_ZIP
 RUN yum install -y wget gcc-c++ cmake
 RUN mkdir /tmp/llvm-project && wget -qO - https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-18.1.8.tar.gz | tar -xz -C /tmp/llvm-project --strip-components 1 && \
     mkdir /tmp/llvm-project/build && cd /tmp/llvm-project/build && cmake -DLLVM_ENABLE_PROJECTS='clang;lld' -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/lib/llvm-18/ ../llvm && \
-    make -j$(nproc) && make -j$(nproc) install && rm -rf /tmp/llvm-project
+    make -j2 && make -j2 install && rm -rf /tmp/llvm-project
 
 # Install OpenGL
 RUN yum install -y -v mesa-libGL mesa-libGL-devel mesa-libEGL mesa-libEGL-devel
@@ -75,7 +75,7 @@ RUN cd /tmp/bazel_build/opencv && git checkout 4.10.0 && cd release && cmake .. 
     -DWITH_ITT=OFF -DWITH_IPP=OFF -DBUILD_EXAMPLES=OFF \
     -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_opencv_ts=OFF \
     -DCV_ENABLE_INTRINSICS=ON -DWITH_EIGEN=ON -DWITH_PTHREADS=ON -DWITH_PTHREADS_PF=ON
-RUN cd /tmp/bazel_build/opencv/release && make -j 16 && make install
+RUN cd /tmp/bazel_build/opencv/release && make -j 2 && make install
 
 # Compile Python 3.12
 WORKDIR /tmp/bazel_build
